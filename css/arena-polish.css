@@ -1,0 +1,36 @@
+/* ============================================
+   ACCURANT - ARENA-POLISH.CSS
+   Perapian tampilan arena (layar menyamping):
+   - kartu karakter lebih rapat & tinggi seragam, semua 4 kartu muat di layar
+   - bar tambahan (Resonance / Blood Essence) dan lencana tidak membuat kartu melebar
+   - timer giliran tidak pernah tampil di atas layar hasil
+   - keterangan tahan-lama (tooltip) rapi dan terbaca
+   ============================================ */
+
+@media (orientation: landscape) {
+  .char-slot { min-height: 54px; padding: 3px 6px; gap: 6px; align-items: center; }
+  .char-portrait { width: 42px; height: 42px; min-width: 42px; }
+  .char-portrait .portrait-img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+  .char-info { gap: 0; min-width: 0; flex: 1 1 auto; }
+  .char-name { font-size: 0.7rem; line-height: 1.2; }
+  .char-info .bar-label { margin: 1px 0 0; font-size: 0.53rem; line-height: 1.05; }
+  .char-info .bar-track { height: 4px; }
+  .mech-chips { margin-top: 1px; gap: 3px; }
+  .mech-chip { font-size: 0.54rem; padding: 0 6px; line-height: 1.5; }
+  .status-badge-row { margin-top: 1px; gap: 3px; }
+  .status-badge { font-size: 0.54rem; padding: 0 5px; line-height: 1.5; }
+  .battle-log-list { line-height: 1.35; }
+}
+
+/* Timer & tombol lewati: hilang total begitu pertarungan selesai */
+.turn-timer.tt-hidden, .skip-turn-btn.st-hidden { visibility: hidden; pointer-events: none; }
+
+/* Keterangan tahan-lama */
+#hold-hint {
+  max-width: min(320px, calc(100vw - 24px));
+  padding: 9px 12px;
+  border-radius: 10px;
+  line-height: 1.45;
+  background: rgba(14, 20, 32, 0.97);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Accurant Arena</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="theme-color" content="#15121c">
+  <meta name="description" content="Accurant Arena - game RPG turn-based fantasy.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/shop-regions.css">
+  <link rel="stylesheet" href="css/arena-loading.css">
+  <link rel="stylesheet" href="css/arena-ui.css">
+  <link rel="stylesheet" href="css/arena-menu.css">
+  <link rel="stylesheet" href="css/arena-polish.css">
+  <link rel="stylesheet" href="css/fighters.css">
+  <link rel="stylesheet" href="css/shop-hub.css">
+</head>
+<body>
+
+  <!-- ===== LATAR BELAKANG (diatur ambience.js lewat body[data-scene]) =====
+       home   : video loop (assets/lobby.mp4, gambar cadangan lobby-poster.jpg)
+       menu   : gambar diam yang diburamkan
+       battle : latar arena buatan CSS (bisa diganti file assets/arena-bg.jpg) -->
+  <div class="app-bg" id="app-bg" aria-hidden="true">
+    <video class="bg-video" id="bg-video" src="assets/lobby.mp4" poster="assets/lobby-poster.jpg"
+           autoplay muted loop playsinline preload="auto" disablepictureinpicture></video>
+    <div class="bg-still"></div>
+    <div class="bg-arena"><div class="bg-arena-embers"></div></div>
+    <div class="bg-shade"></div>
+  </div>
+
+  <!-- Ikon garis (SVG) untuk menu bawah & tombol beranda -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 10v9.5h5v-5.5h3v5.5h5V10"/></symbol>
+      <symbol id="ic-shop" viewBox="0 0 24 24"><path d="M3 4h2.5l2.2 10.5h9.6L19.5 7H6.2"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="16.5" cy="19" r="1.4"/></symbol>
+      <symbol id="ic-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5ZM12 6.5v13"/></symbol>
+      <symbol id="ic-museum" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5H3ZM5.5 11.5v6M10 11.5v6M14 11.5v6M18.5 11.5v6M3.5 19.5h17"/></symbol>
+      <symbol id="ic-data" viewBox="0 0 24 24"><path d="M5 6.5C5 5.1 8.1 4 12 4s7 1.1 7 2.5S15.9 9 12 9 5 7.9 5 6.5ZM5 6.5v11C5 18.9 8.1 20 12 20s7-1.1 7-2.5v-11M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></symbol>
+      <symbol id="ic-gear" viewBox="0 0 24 24"><path d="M12 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4ZM12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"/></symbol>
+      <symbol id="ic-exit" viewBox="0 0 24 24"><path d="M10 4H5.5v16H10M14 8l4 4-4 4M18 12H9"/></symbol>
+      <symbol id="ic-swords" viewBox="0 0 24 24"><path d="M4.5 4.5 15 15M19.5 4.5 9 15M13 17l4 4M11 17l-4 4M15.5 13.5l2.5 2.5M8.5 13.5 6 16"/></symbol>
+      <symbol id="ic-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="8.6" cy="8.6" r=".9"/><circle cx="15.4" cy="8.6" r=".9"/><circle cx="12" cy="12" r=".9"/><circle cx="8.6" cy="15.4" r=".9"/><circle cx="15.4" cy="15.4" r=".9"/></symbol>
+      <symbol id="ic-sound" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4ZM15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+      <symbol id="ic-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4ZM16 9.5l5 5M21 9.5l-5 5"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="game-header">
+    <h1 class="game-title">ACCURANT</h1>
+    <p class="game-subtitle">Fantasy Turn-Based RPG</p>
+  </header>
+
+  <!-- ===== BERANDA (LOBI) ===== -->
+  <!-- Gaya referensi: video latar penuh, banner profil menggantung di kiri (foto persegi berbingkai),
+       koin di kanan atas, kartu mode permainan di kanan, hero di tengah, bar menu di bawah.
+       Semua id tombol sengaja sama seperti sebelumnya supaya main.js tidak berubah. -->
+  <main class="home-screen" id="home-screen">
+    <div class="lobby-top">
+      <div class="profile-left">
+        <button class="avatar-btn" id="avatar-btn" aria-label="Ganti foto profil">
+          <span class="avatar-img" id="avatar-img">👤</span>
+          <span class="avatar-level" id="avatar-level">Lv. 1</span>
+        </button>
+        <div class="profile-info">
+          <input class="player-name-input" id="player-name-input" type="text" maxlength="16" placeholder="Nama pemain" autocomplete="off">
+          <div class="exp-bar"><div class="exp-fill" id="exp-fill"></div></div>
+          <span class="exp-text" id="exp-text">EXP 0/100</span>
+        </div>
+      </div>
+      <h1 class="lobby-title">ACCURANT</h1>
+      <div class="lobby-top-right">
+        <div class="coin-display" id="home-coin-display"></div>
+        <button class="mini-btn" id="music-toggle-btn" aria-label="Musik" title="Musik"><svg class="ic"><use href="#ic-sound"/></svg></button>
+      </div>
+    </div>
+    <input class="hidden-file" type="file" id="avatar-file" accept="image/*">
+
+    <p class="home-note hidden" id="home-note"></p>
+
+    <!-- Kartu mode permainan (kanan) -->
+    <div class="lobby-play">
+      <button class="home-menu-btn home-menu-btn-primary lobby-play-main" id="home-arena-btn"><svg class="ic ic-lg"><use href="#ic-swords"/></svg><span>Masuk Arena</span></button>
+    </div>
+
+    <!-- Bar menu bawah -->
+    <nav class="lobby-nav">
+      <button class="nav-btn active" id="home-home-btn" aria-label="Beranda"><svg class="ic"><use href="#ic-home"/></svg><span class="nav-label">Beranda</span></button>
+      <button class="nav-btn" id="home-shop-btn" aria-label="Toko"><svg class="ic"><use href="#ic-shop"/></svg><span class="nav-label">Toko</span></button>
+      <button class="nav-btn" id="home-collection-btn" aria-label="Koleksi"><svg class="ic"><use href="#ic-book"/></svg><span class="nav-label">Koleksi</span></button>
+      <button class="nav-btn" id="home-museum-btn" aria-label="Museum"><svg class="ic"><use href="#ic-museum"/></svg><span class="nav-label">Museum</span></button>
+      <button class="nav-btn" id="home-data-btn" aria-label="Data"><svg class="ic"><use href="#ic-data"/></svg><span class="nav-label">Data</span></button>
+      <button class="nav-btn" id="home-settings-btn" aria-label="Pengaturan"><svg class="ic"><use href="#ic-gear"/></svg><span class="nav-label">Setelan</span></button>
+      <button class="nav-btn" id="home-exit-btn" aria-label="Keluar"><svg class="ic"><use href="#ic-exit"/></svg><span class="nav-label">Keluar</span></button>
+    </nav>
+  </main>
+
+  <!-- ===== LAYAR PENGATURAN ===== -->
+  <main class="settings-screen hidden" id="settings-screen">
+    <button class="back-btn" id="settings-back-btn">← Beranda</button>
+    <div class="settings-card">
+      <div class="settings-row">
+        <span class="settings-label">Musik latar</span>
+        <button class="settings-toggle" id="music-setting-btn">Nyala</button>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label">Volume</span>
+        <input class="settings-range" id="music-volume" type="range" min="0" max="100" step="5" value="60">
+      </div>
+    </div>
+    <p class="settings-note">Pengaturan lain menyusul di update berikutnya.</p>
+  </main>
+
+  <!-- ===== LAYAR DATA ===== -->
+  <main class="data-screen hidden" id="data-screen">
+    <button class="back-btn" id="data-back-btn">← Beranda</button>
+    <p class="data-status" id="data-status"></p>
+    <textarea class="data-code" id="data-code" rows="5" placeholder="Kode cadangan muncul di sini. Untuk memuat, tempel kodenya di sini."></textarea>
+    <button class="home-menu-btn" id="data-export-btn">📋 Buat Kode Cadangan</button>
+    <button class="home-menu-btn" id="data-import-btn">📥 Muat dari Kode</button>
+    <button class="home-menu-btn" id="data-reset-btn">🗑️ Reset Data</button>
+    <p class="data-message" id="data-message"></p>
+  </main>
+
+  <!-- ===== LAYAR MUSEUM ===== -->
+  <!-- Preview semua karakter & bos. Digeser ke kanan, satu halaman per karakter. -->
+  <main class="museum-screen hidden" id="museum-screen">
+    <button class="back-btn" id="museum-back-btn">← Beranda</button>
+    <p class="museum-hint" id="museum-hint">Geser ke kanan ›</p>
+    <div class="museum-track" id="museum-track">
+      <!-- Halaman dibuat otomatis oleh museum.js -->
+    </div>
+  </main>
+
+  <!-- ===== LAYAR KOLEKSI ===== -->
+  <main class="collection-screen hidden" id="collection-screen">
+    <div class="col-header">
+      <button class="back-btn" id="collection-back-btn">← Beranda</button>
+      <span class="col-title">Koleksi</span>
+      <div class="col-tabs" id="collection-tabs"><!-- (kosong: Koleksi hanya berisi Kesatria) --></div>
+    </div>
+    <div class="collection-list" id="collection-list">
+      <!-- Kartu karakter dibuat otomatis oleh showcase.js -->
+    </div>
+  </main>
+
+  <!-- ===== LAYAR TOKO ===== -->
+  <main class="shop-screen hidden" id="shop-screen">
+    <div class="shop-top-row">
+      <button class="back-btn" id="shop-back-btn">← Beranda</button>
+      <div class="coin-display" id="shop-coin-display"></div>
+    </div>
+    <div class="shop-list" id="shop-list">
+      <!-- Daftar item dibuat otomatis oleh shop.js -->
+    </div>
+  </main>
+
+  <!-- ===== MENU ARENA ===== -->
+  <!-- Dua kartu: Roulette (lawan dipilih sistem) di atas, Roster (kamu yang memilih) di bawah.
+       Gambar arena: taruh file assets/arena-roulette.jpg dan assets/arena-roster.jpg -->
+  <main class="arena-menu-screen hidden" id="arena-menu-screen">
+    <div class="arena-menu-top">
+      <button class="back-btn" id="arena-menu-back-btn">← Beranda</button>
+      <h2 class="arena-menu-title">Pilih Arena</h2>
+      <div class="coin-display" id="arena-coin-display"></div>
+    </div>
+    <div class="arena-menu-note hidden" id="arena-menu-note">
+      <span>Kamu belum punya Kesatria. Beli satu di Toko dulu supaya bisa masuk arena.</span>
+      <button class="arena-note-btn" id="arena-menu-shop-btn">Ke Toko</button>
+    </div>
+    <div class="arena-menu-cards" id="arena-menu-cards">
+      <button class="arena-card arena-card-roulette" id="arena-roulette-btn">
+        <svg class="arena-card-sigil" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="60" cy="60" r="36" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5"/>
+          <circle cx="60" cy="60" r="8" fill="currentColor"/>
+          <path d="M60 8v28M60 84v28M8 60h28M84 60h28M23 23l20 20M77 77l20 20M97 23L77 43M43 77L23 97" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="arena-card-art"></span>
+        <span class="arena-card-body">
+          <span class="arena-card-name">Roulette</span>
+          <span class="arena-card-sub">Arena dipilih sistem</span>
+          <span class="arena-card-desc">Pilih kesulitan dan timmu. Sistem menurunkan 4 lawan yang kekuatannya setara denganmu. Hadiah lebih besar.</span>
+        </span>
+      </button>
+      <button class="arena-card arena-card-roster" id="arena-roster-btn">
+        <svg class="arena-card-sigil" viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M22 18l50 50-8 8L14 26zM98 18L48 68l8 8 50-50z" fill="currentColor" fill-opacity="0.85"/>
+          <path d="M30 96l14-14 8 8-14 14zM90 96L76 82l-8 8 14 14z" fill="currentColor"/>
+          <path d="M20 104l12-12M100 104L88 92" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <span class="arena-card-art"></span>
+        <span class="arena-card-body">
+          <span class="arena-card-name">Roster</span>
+          <span class="arena-card-sub">Arena memilih</span>
+          <span class="arena-card-desc">Tentukan sendiri 1-4 karakter timmu dan 1-4 lawanmu. Hadiah menyesuaikan seberapa berat pilihanmu.</span>
+        </span>
+      </button>
+    </div>
+  </main>
+
+
+  <!-- ===== LAYAR PEMILIHAN KARAKTER ===== -->
+  <!-- Dipakai Roulette dan Roster: kesulitan -> tim (1-4) -> [Roster: lawan 1-4]. -->
+  <main class="selection-screen hidden" id="selection-screen">
+    <button class="back-btn" id="selection-back-btn">← Kembali</button>
+    <p class="selection-instruction" id="selection-instruction">Pilih 4 karakter (urutan tap = urutan slot). Tap 2 karakter yang sudah dipilih untuk tukar posisi; tap karakter yang sama 2x untuk membatalkan.</p>
+    <div class="difficulty-panel hidden" id="difficulty-panel">
+      <!-- Kartu Easy/Normal/Hard/Extreme dibuat otomatis oleh selection.js -->
+    </div>
+    <div class="selection-grid" id="selection-grid">
+      <!-- Kartu karakter dibuat otomatis oleh selection.js -->
+    </div>
+    <div class="selection-footer" id="selection-footer">
+      <div class="team-strip" id="team-strip"><!-- 4 slot tim, dibuat selection.js --></div>
+      <p class="arena-reward-hint" id="arena-reward-hint"></p>
+      <button class="start-battle-btn" id="start-battle-btn" disabled>
+        Pilih minimal 1 karakter
+      </button>
+    </div>
+  </main>
+
+  <!-- ===== LAYAR ARENA PERTARUNGAN ===== -->
+  <!-- Tersembunyi di awal, baru muncul setelah pemain menekan "Mulai Pertarungan" -->
+  <main class="battle-arena hidden" id="battle-screen">
+
+    <section class="team team-player" id="team-player">
+      <h2 class="team-label">Timmu</h2>
+      <div class="slot-list" id="player-slots"></div>
+      <div class="item-bar">
+        <button class="item-bar-btn" id="open-item-panel-btn" disabled>🎒 Tas</button>
+      </div>
+    </section>
+
+    <div class="arena-divider">
+      <span class="vs-text">VS</span>
+      <!-- Keterangan (log pertarungan): menempel di bagian bawah tengah arena, VS tepat di tengah -->
+      <footer class="battle-log hidden" id="battle-log">
+        <div class="battle-log-list" id="battle-log-list"></div>
+      </footer>
+      <!-- Tas item: kotak TERPISAH dari keterangan. Naik dari bawah saat tombol Tas ditekan,
+           turun lagi (hilang ke bawah) kalau tombol Tas ditekan sekali lagi. -->
+      <div class="skill-panel hidden" id="item-panel">
+        <p class="skill-panel-title">🎒 Tas</p>
+        <div class="skill-list" id="item-list"></div>
+        <p class="item-info" id="item-info"></p>
+        <button class="skill-cancel-btn" id="item-cancel-btn">Batal</button>
+        <p class="bag-drag-msg" id="bag-drag-msg"></p>
+      </div>
+    </div>
+
+    <section class="team team-enemy" id="team-enemy">
+      <h2 class="team-label">Musuh</h2>
+      <div class="slot-list" id="enemy-slots"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== PANEL PEMILIHAN SKILL ===== -->
+  <!-- Muncul saat pemain tap salah satu karakternya yang belum beraksi -->
+  <div class="skill-panel hidden" id="skill-panel">
+    <p class="skill-panel-title" id="skill-panel-title">Giliran - pilih skill</p>
+    <div class="skill-list" id="skill-list"></div>
+    <button class="skill-cancel-btn" id="skill-cancel-btn">Batal</button>
+  </div>
+
+  <!-- ===== KONFIRMASI PAKAI ARTEFAK ===== -->
+  <div class="confirm-modal hidden" id="confirm-modal">
+    <div class="confirm-box">
+      <p class="confirm-text" id="confirm-text">Yakin mau memakai ini?</p>
+      <div class="confirm-actions">
+        <button class="confirm-btn confirm-yes" id="confirm-yes-btn">Iya</button>
+        <button class="confirm-btn confirm-no" id="confirm-no-btn">Ga jadi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PENANDA GILIRAN MUSUH ===== -->
+  <!-- Muncul di bagian bawah layar selama musuh "berpikir" (sekitar 2 detik) -->
+  <div class="enemy-thinking hidden" id="enemy-thinking">
+    <svg class="hourglass" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M11 5h26M11 43h26" stroke="#e8c874" stroke-width="3" stroke-linecap="round"/>
+      <path d="M14 5c0 10 8 14 10 19-2 5-10 9-10 19M34 5c0 10-8 14-10 19 2 5 10 9 10 19" fill="none" stroke="#c9a24b" stroke-width="2.5"/>
+      <path d="M17 8h14c-1 5-5 8-7 11-2-3-6-6-7-11z" fill="#e8c874"/>
+      <path d="M24 29c2 3 6 5 8 11H16c2-6 6-8 8-11z" fill="#e8c874"/>
+    </svg>
+    <p class="enemy-thinking-text">Giliran musuhmu, biarkan mereka berpikir...</p>
+  </div>
+
+  <!-- ===== LAYAR HASIL PERTARUNGAN ===== -->
+  <!-- Muncul otomatis begitu pertarungan berakhir (menang atau kalah) -->
+  <main class="result-screen hidden" id="result-screen">
+    <div class="result-modal" id="result-modal">
+      <h2 class="result-title" id="result-title">Kamu Menang!</h2>
+      <div class="result-stats" id="result-stats"></div>
+      <div class="result-actions">
+        <button class="result-btn result-btn-primary" id="result-arena-btn">⚔ Menu Arena</button>
+        <button class="result-btn" id="result-retry-btn">↻ Ulang</button>
+        <button class="result-btn" id="result-home-btn">🏠 Kembali ke Beranda</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- URUTAN FILE PENTING: file yang belakangan boleh memakai / membungkus fungsi dari yang duluan.
+       Data      : emblems, characters, charactersExtra (biaya skill dihitung otomatis di sini)
+       Aturan    : difficulty, arena, concepts, banner
+       Pertarungan: battle (dasar) -> enemyAI -> mechanics (sistem energi, skill khusus, giliran)
+       Lainnya   : akun, item, toko, koleksi, layar-layar menu
+       Tampilan  : fighters (orang lidi + efek dasar) -> arenaFx (latar hidup + efek elemen)
+       storage.js memuat progres setelah semua data siap. -->
+  <script src="js/emblems.js"></script>
+  <script src="js/characters.js"></script>
+  <script src="js/charactersExtra.js"></script>
+  <script src="js/systemEmblems.js"></script>
+  <script src="js/difficulty.js"></script>
+  <script src="js/arena.js"></script>
+  <script src="js/concepts.js"></script>
+  <script src="js/banner.js"></script>
+  <script src="js/battle.js"></script>
+  <script src="js/enemyAI.js"></script>
+  <script src="js/mechanics.js"></script>
+  <script src="js/blackHole.js"></script>
+  <script src="js/account.js"></script>
+  <script src="js/items.js"></script>
+  <script src="js/potionArt.js"></script>
+  <script src="js/potions.js"></script>
+  <script src="js/bag.js"></script>
+  <script src="js/craft.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/shopRegions.js"></script>
+  <script src="js/formation.js"></script>
+  <script src="js/museum.js"></script>
+  <script src="js/showcase.js"></script>
+  <script src="js/orientation.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/arenaIntro.js"></script>
+  <script src="js/battleMenu.js"></script>
+  <script src="js/selection.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/uiPatches.js"></script>
+  <script src="js/progression.js"></script>
+  <script src="js/fighters.js"></script>
+  <script src="js/arenaFx.js"></script>
+  <script src="js/shopHub.js"></script>
+  <script>
+    // Daftarkan service worker (hanya jalan di http/https, bukan file://)
+    if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+      navigator.serviceWorker.register("sw.js").catch(function () { /* abaikan */ });
+    }
+  </script>
+  <script src="js/ambience.js"></script>
+</body>
+</html>

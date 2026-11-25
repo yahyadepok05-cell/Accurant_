@@ -1,0 +1,116 @@
+/* ============================================
+   ACCURANT ARENA - SHOP-HUB.CSS
+   Menu Toko baru (ramuan jadi, bagian "belum tersedia", tombol menu)
+   dan layar Racik Ramuan dua kolom. Lihat js/shopHub.js.
+   ============================================ */
+
+/* ---------- menu Toko ---------- */
+.sh-wrap { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 980px; margin: 0 auto; }
+.sh-section { display: flex; flex-direction: column; gap: 6px; }
+.sh-title { margin: 0; font-size: 0.95rem; letter-spacing: 0.06em; color: var(--color-gold-bright); font-weight: 600; }
+.sh-sub { margin: 4px 0 0; font-size: 0.75rem; color: var(--color-text-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+.sh-divider { border: 0; border-top: 1px solid var(--color-border); margin: 6px 0; width: 100%; }
+
+.sh-prow { display: flex; align-items: stretch; gap: 8px; }
+.sh-prow-label {
+  flex: 0 0 52px; display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: 0.72rem; color: var(--color-gold-bright); letter-spacing: 0.05em;
+  border-right: 1px solid var(--color-border); padding-right: 6px;
+}
+.sh-strip { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 6px; flex: 1; min-width: 0; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+
+.sh-card {
+  flex: 0 0 112px; display: flex; flex-direction: column; gap: 3px; padding: 6px;
+  background: var(--color-surface, #131a28); border: 1px solid var(--color-border); border-radius: 8px;
+}
+.sh-card-art { position: relative; height: 44px; display: flex; align-items: center; justify-content: center; }
+.sh-card-img { height: 100%; width: auto; aspect-ratio: 1 / 1; image-rendering: pixelated; }
+.sh-card-tag { position: absolute; left: 0; top: 0; font-size: 0.58rem; color: #ffd9a8; }
+.sh-card-own { position: absolute; right: 0; bottom: 0; font-size: 0.6rem; color: var(--color-text-dim); }
+.sh-card-name { font-size: 0.74rem; color: var(--color-text); text-align: center; line-height: 1.15; }
+.sh-card-eff { font-size: 0.58rem; color: var(--color-text-dim); text-align: center; line-height: 1.25; min-height: 2.5em; }
+.sh-buy { align-self: center; margin-top: auto; padding: 3px 10px; font-size: 0.72rem; }
+
+/* bagian "belum tersedia" */
+.sh-locked { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sh-lock-tile {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1rem; opacity: 0.55;
+  border: 1px dashed var(--color-border); border-radius: 8px; background: rgba(255, 255, 255, 0.02);
+}
+.sh-locked-note { display: flex; flex-direction: column; font-size: 0.72rem; color: var(--color-text-dim); margin-left: 4px; line-height: 1.3; }
+.sh-locked-note b { color: var(--color-text); font-weight: 500; letter-spacing: 0.06em; }
+
+/* tombol menu */
+.sh-menus { display: flex; flex-direction: column; gap: 8px; margin: 2px 0 14px; }
+.sh-menu-btn {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; box-sizing: border-box; cursor: pointer;
+  background: var(--color-surface, #131a28); color: var(--color-text); border: 1px solid var(--color-border); border-radius: 10px; font-family: inherit; text-align: left;
+}
+.sh-menu-btn:active { transform: scale(0.99); }
+.sh-menu-icon { flex: 0 0 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+.sh-menu-potion { height: 100%; width: auto; image-rendering: pixelated; }
+.sh-menu-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sh-menu-label { font-size: 1.05rem; letter-spacing: 0.05em; }
+.sh-menu-sub { font-size: 0.68rem; color: var(--color-text-dim); }
+.sh-menu-go { font-size: 1.4rem; color: var(--color-gold-bright); }
+
+/* ---------- layar Racik Ramuan ---------- */
+.rk-screen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(210px, 40%); gap: 8px; align-items: stretch; }
+.rk-title { margin: 0 0 4px; font-size: 1rem; letter-spacing: 0.08em; color: var(--color-gold-bright); font-weight: 600; }
+.rk-left { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.rk-left > * { flex-shrink: 0; }
+.rk-right { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+.rk-box { display: flex; flex-direction: column; gap: 5px; padding: 8px; background: var(--color-surface, #131a28); border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; min-height: 0; }
+.rk-box-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.rk-box-title { font-size: 0.78rem; color: var(--color-gold-bright); letter-spacing: 0.05em; }
+.rk-box-sub { font-size: 0.65rem; color: var(--color-text-dim); }
+
+.rk-buy-row { display: flex; align-items: center; gap: 4px; }
+.rk-nav { flex: 0 0 24px; height: 34px; background: rgba(255, 255, 255, 0.05); color: var(--color-gold-bright); border: 1px solid var(--color-border); border-radius: 6px; font-size: 1.1rem; line-height: 1; cursor: pointer; font-family: inherit; }
+.rk-nav:disabled { opacity: 0.3; }
+.rk-nav-s { flex: 0 0 20px; height: 20px; font-size: 0.9rem; }
+.rk-pager { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; color: var(--color-text-dim); }
+.rk-buy-main { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.rk-buy-art { flex: 0 0 38px; height: 38px; display: flex; align-items: center; justify-content: center; }
+.rk-buy-img { height: 100%; width: auto; image-rendering: pixelated; }
+.rk-buy-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.rk-buy-name { font-size: 0.78rem; color: var(--color-text); line-height: 1.15; }
+.rk-buy-eff { font-size: 0.6rem; color: var(--color-text-dim); line-height: 1.2; }
+.rk-buy-own { font-size: 0.58rem; color: var(--color-text-dim); }
+.rk-buy-btn { align-self: center; padding: 3px 14px; font-size: 0.75rem; }
+
+.rk-own-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.rk-own-grid .bag-tile { flex: none; width: auto; height: auto; min-height: 0; padding: 3px 1px 2px; }
+.rk-own-grid .bag-tile-img { max-width: 24px; }
+.rk-own-grid .bag-name { font-size: 0.5rem; line-height: 1.05; }
+.rk-own-grid .bag-count { font-size: 0.55rem; }
+.rk-own-hint, .rk-empty { font-size: 0.62rem; color: var(--color-text-dim); margin: 0; line-height: 1.3; }
+
+/* mesin racik di kolom kiri dipadatkan (tinggi layar HP menyamping pendek) */
+.rk-menu .craft-menu-head { padding: 8px 12px; font-size: 0.95rem; }
+.rk-menu .craft-menu-body { padding: 2px 8px 8px; min-height: 0; }
+.rk-menu .craft-chain { margin: 6px 0 4px; }
+.rk-menu .craft-slot { max-width: 56px; padding: 5px; }
+.rk-menu .craft-arrow-col { flex: 0 0 46px; padding-top: 12px; gap: 3px; }
+.rk-menu .craft-slot-cap { font-size: 0.62rem; }
+.rk-menu .craft-slot-eff { font-size: 0.54rem; }
+.rk-menu .craft-info { font-size: 0.64rem; margin: 3px 0 5px; line-height: 1.35; }
+.rk-menu .craft-message { font-size: 0.68rem; margin: 3px 0 5px; }
+.rk-menu .craft-stepper { padding: 2px 0; }
+.rk-menu .craft-make-btn { margin: 6px auto 2px; }
+
+/* Layar menyamping (HP): dua kolom pas satu layar, kolom kiri yang di-scroll, kolom kanan tetap */
+@media (orientation: landscape) and (max-height: 520px) {
+  .rk-screen { height: calc(100dvh - 62px); }
+  .rk-left { overflow-y: auto; padding-right: 4px; -webkit-overflow-scrolling: touch; }
+  .rk-right { overflow: hidden; }
+  .rk-buy { flex: 0 0 auto; }
+  .rk-own { flex: 1 1 auto; }
+}
+
+/* Layar potret: kolom ditumpuk, tidak ada scroll terpisah */
+@media (orientation: portrait) {
+  .rk-screen { grid-template-columns: 1fr; }
+  .rk-right { order: -1; }
+}
